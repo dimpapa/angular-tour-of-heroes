@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { Hero } from '../hero';
+import { Hero } from '../model/hero';
+import { HeroResponse } from '../model/hero-response';
 import { HeroService } from '../service/hero.service';
 
 @Component({
@@ -21,6 +22,6 @@ export class DashboardComponent {
   }
 
   getHeroes(): void {
-    this.heroService.getHeroes().subscribe(heroes => this._heroes = heroes.slice(1, 5));
+    this.heroService.getHeroes().subscribe((response: HeroResponse) => this._heroes = response.data.slice(1, 5));
   }
 }

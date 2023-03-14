@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-import { Hero } from '../hero';
-import { HEROES } from '../mock-heroes';
+import { Hero } from '../model/hero';
+import { HeroResponse } from '../model/hero-response';
+
 import { MessageService } from './message.service';
 
 @Injectable({
@@ -10,17 +12,25 @@ import { MessageService } from './message.service';
 })
 export class HeroService {
 
-  constructor(private messageService: MessageService) { }
+  // URL to web api
+  private _heroesUrl = 'http://localhost:3000/api/heroes';
 
-  getHeroes():Observable<Hero[]> {
-    const heroes = of(HEROES);
-    this.messageService.add("Hero (service): Fetched heroes");
-    return heroes;
+  constructor(
+    private _http: HttpClient,
+    private _messageService: MessageService
+  ) { }
+
+  /** GET heroes from the server */
+  getHeroes(): Observable<HeroResponse> {
+    return this._http.get<HeroResponse>(this._heroesUrl);
   }
 
-  getHero(id: number): Observable<Hero> {
-    const hero = HEROES.find(h => h.id === id)!;
-    this.messageService.add(`Hero (service): fetched hero id=${id}`);
-    return of(hero);
+  getHero(id: number): Observable<HeroResponse> {
+    return this._http.get<HeroResponse>(`${this._heroesUrl}/id/${id}`);
+  }
+
+  /** Log a HeroService message with the MessageService */
+  private log(message: string) {
+    this._messageService.add(`Hero (service): ${message}`);
   }
 }

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 
-import { Hero } from '../hero';
+import { Hero } from '../model/hero';
+import { HeroResponse } from '../model/hero-response';
 import { HeroService } from '../service/hero.service';
 import { MessageService } from '../service/message.service';
 
@@ -11,7 +12,7 @@ import { MessageService } from '../service/message.service';
 })
 export class HeroesComponent {
 
-  constructor(private heroServce:HeroService, private messageService: MessageService) {}
+  constructor(private heroService:HeroService, private messageService: MessageService) {}
 
   heroes: Hero[] = [];
   // selectedHero?: Hero;
@@ -21,7 +22,7 @@ export class HeroesComponent {
   }
 
   getHeroes(): void {
-    this.heroServce.getHeroes().subscribe(heroes => this.heroes = heroes);
+    this.heroService.getHeroes().subscribe( (response:HeroResponse) => this.heroes = response.data);
   }
 
   // onSelect(hero: Hero): void {
